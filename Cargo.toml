@@ -1,0 +1,7 @@
+[package]
+name = "image_search"
+version = "0.1.0"
+authors = ["user"]
+
+[dependencies]
+image = "*"
