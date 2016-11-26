@@ -194,11 +194,6 @@ fn image_multiplication(source: &image::DynamicImage, template: &image::DynamicI
 
 			if averaget < TEMPLATE_BLACK_THRESHOLD {
 				let (nsr, nsg, nsb) = color_normalize(sr, sg, sb);
-				// let (ntr, ntg, ntb) = color_normalize(tr, tg, tb);
-
-				// let nor = nsr * ntr;
-				// let nog = nsg * ntg;
-				// let nob = nsb * ntb;
 
 				let nor = nsr * 0f64;
 				let nog = nsg * 0f64;
@@ -272,14 +267,11 @@ fn color_to_8bits(r: f64, g: f64, b: f64) -> (u8, u8, u8) {
 
 fn image_comparasion(search_source_path: &PathBuf, compare_template_path: &PathBuf, width: &u32, height: &u32,
 	source_start_x: &u32, source_start_y: &u32, search_region: &Vec<(u32, u32)>) -> Option<String> {
-	// let search_source_path = PathBuf::from(search_source);
-	// let compare_template_path = PathBuf::from(compare_template);
 
 	let mut comparasion_image = comparasion_template_generation(search_source_path, compare_template_path, width, height,
 	 source_start_x, source_start_y);
 
 	let mut difference_accumulation = 0;
-	// println!("{:?}", search_region.len());
 
 	for item in search_region.iter() {
 		let (x, y) = *item;
@@ -302,7 +294,6 @@ fn image_comparasion(search_source_path: &PathBuf, compare_template_path: &PathB
 		}
 
 		if difference_accumulation > COMPARE_DIFERENCE_TRESHOLD {
-			// println!("{:?}", difference_accumulation);
 			return None;
 		}
 	}
@@ -310,15 +301,9 @@ fn image_comparasion(search_source_path: &PathBuf, compare_template_path: &PathB
 	let ref mut out_put_file = std::fs::File::create(&Path::new(PIXEL_MULTIPLY_TEST)).unwrap();
 	let _ = comparasion_image.save(out_put_file, image::PNG);
 
-	// if difference_accumulation > COMPARE_DIFERENCE_TRESHOLD {
-	// 	println!("{:?}", difference_accumulation);
-	// 	return None;
-	// }
-
 	let file_name_os = compare_template_path.file_name().unwrap();
 	let file_name_str = file_name_os.to_str().unwrap();
 
-	// println!("{:?}", difference_accumulation);
 	Some(file_name_str.to_string())
 
 	// green is comparasion_region and blue is black pixel inside the region.
@@ -356,21 +341,9 @@ fn main() {
 		}
 	}
 
-    // let search_test = PathBuf::from(SEARCH_TEST);
     let (search_region, start_x, end_x, start_y, end_y) = search_image_dimension_check(&search_file_path);
     let image_width = end_x - start_x;
     let image_height = end_y - start_y;
-
-    // let compare_test = PathBuf::from(COMPARE_TEST);
-    // let file_name = image_comparasion(&search_test, &compare_test, &image_width, &image_height, &start_x, &start_y, &search_region);
-    // match file_name {
-    // 	Some(name) => {
-    // 		println!("{:?}", name);
-    // 	},
-    // 	None => {
-    // 		println!("{:?}", "No match file!");
-    // 	},
-    // }
 
     let database_read = std::fs::read_dir(Path::new(DATABASE)).unwrap();
 
